@@ -16,5 +16,9 @@ class AuthorSpider(scrapy.Spider):
                 'duration': video.css('td.duration::text').re("[^\t\n]+")[0],
                 'author': video.css('td.by a::text').get(),
                 'comments_no': video.css('td.comments::text').get(),
-
             }
+
+        next_page = response.css('a.rightPaging::attr(href)').get()
+        if next_page is not None:
+            next_page = response.urljoin(next_page)
+            yield scrapy.Request(next_page, callback=self.parse)
