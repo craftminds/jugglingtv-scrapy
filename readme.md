@@ -19,3 +19,7 @@ To be used later in the spider program:
 scrapy crawl author -O videos.json 
 ```
 -O moderator overwrites the output file
+
+### TODO:
+- [ ] create the spider to go through all the webpages with thumbnails
+- [ ] visit all video pages and gather even more data!
