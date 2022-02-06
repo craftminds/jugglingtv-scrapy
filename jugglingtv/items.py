@@ -9,7 +9,7 @@ from scrapy.loader.processors import MapCompose, TakeFirst
 
 def remove_white_spaces(text):
     # strip from tabs and spaces
-    text = text.re("[^\t\n]+")
+    text = text.strip()
     return text
 
 # should do some polishing on the output info
