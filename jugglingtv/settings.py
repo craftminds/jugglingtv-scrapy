@@ -62,9 +62,10 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'jugglingtv.pipelines.JugglingtvPipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'jugglingtv.pipelines.JugglingtvPipeline': 300,
+    'jugglingtv.pipelines.SaveVideosPipeline': 400,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -86,3 +87,6 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+#connection string to connect to database - can be replace for another databse container type
+CONNECTION_STRING = 'sqlite:////Users/arturwitek/Development/scrapy/jugglingtv/scrapy_jugglingtv.db'

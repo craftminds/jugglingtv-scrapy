@@ -21,13 +21,16 @@ class VideoItem(Item):
     video_link = Field()
     thumbnail = Field()
     views = Field()
-    duration = Field()
+    duration = Field(
+        input_processor=MapCompose(remove_white_spaces),
+        output_processor=TakeFirst()
+    )
     author = Field()
     comments_no = Field()
     video_description = Field()
     video_year = Field()
     video_country = Field()
-    video_channels = Field()
+    # video_channels = Field() <- to be specified later if the current code works
     video_tags = Field()
    
     
