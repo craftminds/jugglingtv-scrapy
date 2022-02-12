@@ -3,15 +3,22 @@ from jugglingtv.items import VideoItem
 from scrapy.loader import ItemLoader
 
 
+import logging
 
+
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+logging.getLogger("sqlalchemy.pool").setLevel(logging.DEBUG)
 
 class AuthorSpider(scrapy.Spider):
     name = 'videos'
     video_item = VideoItem()
 
     start_urls = ['http://juggling.tv/videos/basic/mr']
+    
 
     def parse(self, response):
+        self.logger.info('Parse function called on {}'.format(response.url))
         for video in response.css("div.listwatch"):
             loader = ItemLoader(item=VideoItem(), selector = video)
             loader.add_css('title', 'table.title a::text')
@@ -26,11 +33,10 @@ class AuthorSpider(scrapy.Spider):
             # get inside the video and extract data
             video_url = video.css('table.title a::attr(href)').get()
             yield response.follow(video_url, self.parse_single_video, meta={'video_item': video_item})
-
-        next_page = response.css('a.rightPaging::attr(href)').get()
-        if next_page is not None:
-            next_page = response.urljoin(next_page)
-            yield scrapy.Request(next_page, callback=self.parse)
+        # next_page = response.css('a.rightPaging::attr(href)').get()
+        # if next_page is not None:
+        #     next_page = response.urljoin(next_page)
+        #     yield scrapy.Request(next_page, callback=self.parse)
     
     def parse_single_video(self, response):
         # def extract_with_css(query):
@@ -42,5 +48,8 @@ class AuthorSpider(scrapy.Spider):
        loader.add_css('video_country', 'span.vv-cunt::text')
     #    loader.add_css('video_channels', 'div.mb-5.vv-chan a::attr(href)')
        loader.add_css('video_tags', 'div.mb-5.vv-tags a::attr(href)')
+       # this function is a key to run the item loader, otherwise there was no output
+       yield loader.load_item()
+ 
 
        

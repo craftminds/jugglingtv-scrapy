@@ -63,8 +63,9 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'jugglingtv.pipelines.JugglingtvPipeline': 300,
-    'jugglingtv.pipelines.SaveVideosPipeline': 400,
+    # 'jugglingtv.pipelines.JugglingtvPipeline': 300,
+    'jugglingtv.pipelines.SaveVideosPipeline': 300,
+    #'jugglingtv.pipelines.JsonWriterPipeline': 400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

@@ -41,7 +41,7 @@ class Video(Base):
     duration = Column('duration', Integer)
     comments_no = Column('comments_no', Integer)
     description = Column('description', Text())
-    year = Column('year', Integer)
+    year = Column('year', Text())
     country = Column('country', String(20))
     author_id = Column(Integer, ForeignKey('author.id'))  # Many videos to one author
     tags = relationship('Tag', secondary='video_tag',

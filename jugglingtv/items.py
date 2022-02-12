@@ -4,7 +4,7 @@
 # https://docs.scrapy.org/en/latest/topics/items.html
 
 from scrapy.item import Item, Field
-from scrapy.loader.processors import MapCompose, TakeFirst
+from itemloaders.processors import MapCompose, TakeFirst
 
 
 def remove_white_spaces(text):
@@ -18,25 +18,40 @@ class VideoItem(Item):
         input_processor=MapCompose(remove_white_spaces),
         output_processor=TakeFirst()
         )
-    video_link = Field()
-    thumbnail = Field()
-    views = Field()
+    video_link = Field(
+                output_processor=TakeFirst()
+
+    )
+    thumbnail = Field(
+                output_processor=TakeFirst()
+
+    )
+    views = Field(
+                output_processor=TakeFirst()
+
+    )
     duration = Field(
         input_processor=MapCompose(remove_white_spaces),
         output_processor=TakeFirst()
     )
-    author = Field()
-    comments_no = Field()
-    video_description = Field()
-    video_year = Field()
-    video_country = Field()
+    author = Field(
+        output_processor=TakeFirst()
+    )
+    comments_no = Field(
+                output_processor=TakeFirst()
+
+    )
+    video_description = Field(
+                output_processor=TakeFirst()
+
+    )
+    video_year = Field(
+                output_processor=TakeFirst()
+
+    )
+    video_country = Field(
+                output_processor=TakeFirst()
+
+    )
     # video_channels = Field() <- to be specified later if the current code works
     video_tags = Field()
-   
-    
-
-
-# continue here:https://towardsdatascience.com/a-minimalist-end-to-end-scrapy-tutorial-part-ii-b917509b73f7
-
-
-

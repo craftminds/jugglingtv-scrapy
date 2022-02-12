@@ -10,10 +10,26 @@ from sqlalchemy.orm import sessionmaker
 from scrapy.exceptions import DropItem
 from jugglingtv.models import Video, Author, Tag, db_connect, create_table
 
+import json
 
-class JugglingtvPipeline:
+from itemadapter import ItemAdapter
+
+class JsonWriterPipeline:
+
+    def open_spider(self, spider):
+        self.file = open('items.jl', 'w')
+
+    def close_spider(self, spider):
+        self.file.close()
+
     def process_item(self, item, spider):
+        line = json.dumps(ItemAdapter(item).asdict()) + "\n"
+        self.file.write(line)
         return item
+        
+# class JugglingtvPipeline:
+#     def process_item(self, item, spider):
+#         return item
 
 class SaveVideosPipeline(object):
     def __init__(self):
@@ -35,7 +51,7 @@ class SaveVideosPipeline(object):
         author = Author()
         tag = Tag()
         video.title = item["title"]
-        video.thumbnail_url = item["thumbnail_url"]
+        video.thumbnail_url = item["thumbnail"]
         video.video_url = item["video_link"]
         video.views = item["views"]
         video.duration = item["duration"]
