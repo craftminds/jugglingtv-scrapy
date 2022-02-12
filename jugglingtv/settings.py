@@ -65,7 +65,6 @@ ROBOTSTXT_OBEY = True
 ITEM_PIPELINES = {
     # 'jugglingtv.pipelines.JugglingtvPipeline': 300,
     'jugglingtv.pipelines.SaveVideosPipeline': 300,
-    #'jugglingtv.pipelines.JsonWriterPipeline': 400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

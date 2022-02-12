@@ -22,9 +22,6 @@ def extract_date(text):
     #convert video date to python format
     return datetime.strptime(text,"%Y-%m-%d")
 
-def default_value(text):
-    #set default value if none is present
-    return text or ''
 
 # should do some polishing on the output info
 class VideoItem(Item):
