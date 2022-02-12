@@ -6,20 +6,19 @@ from scrapy.loader import ItemLoader
 import logging
 
 
-logging.basicConfig()
-logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
-logging.getLogger("sqlalchemy.pool").setLevel(logging.DEBUG)
+# logging.basicConfig()
+# logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+# logging.getLogger("sqlalchemy.pool").setLevel(logging.DEBUG)
 
 class AuthorSpider(scrapy.Spider):
     name = 'videos'
     video_item = VideoItem()
-
     start_urls = ['http://juggling.tv/videos/basic/mr']
     
-
     def parse(self, response):
         self.logger.info('Parse function called on {}'.format(response.url))
-        for video in response.css("div.listwatch"):
+        videos = response.css("div.listwatch")
+        for video in videos:
             loader = ItemLoader(item=VideoItem(), selector = video)
             loader.add_css('title', 'table.title a::text')
             loader.add_css('video_link', 'table.title a::attr(href)')
@@ -44,7 +43,7 @@ class AuthorSpider(scrapy.Spider):
        video_item = response.meta['video_item']
        loader = ItemLoader(item=video_item, response = response)
        loader.add_css('video_description', 'div.vv-video-desc::text')
-       loader.add_css('video_year', 'span.vv-loco::text')
+       loader.add_css('video_year', 'span.vv-date::text')
        loader.add_css('video_country', 'span.vv-cunt::text')
     #    loader.add_css('video_channels', 'div.mb-5.vv-chan a::attr(href)')
        loader.add_css('video_tags', 'div.mb-5.vv-tags a::attr(href)')

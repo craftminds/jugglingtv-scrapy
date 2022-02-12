@@ -41,7 +41,7 @@ class Video(Base):
     duration = Column('duration', Integer)
     comments_no = Column('comments_no', Integer)
     description = Column('description', Text())
-    year = Column('year', Text())
+    year = Column('year', DateTime)
     country = Column('country', String(20))
     author_id = Column(Integer, ForeignKey('author.id'))  # Many videos to one author
     tags = relationship('Tag', secondary='video_tag',
@@ -63,5 +63,5 @@ class Tag(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column('name', String(30), unique=True)
-    quotes = relationship('Video', secondary='video_tag',
+    videos = relationship('Video', secondary='video_tag',
         lazy='dynamic', backref="tag")  # M-to-M for quote and tag
