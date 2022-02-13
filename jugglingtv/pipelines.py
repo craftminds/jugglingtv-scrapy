@@ -41,12 +41,13 @@ class SaveVideosPipeline(object):
         video.comments_no = item["comments_no"]
         video.description = item["video_description"]
         video.year = item["video_year"]
-        try:
+        #check whether video_country exists
+        if "video_country" in item:
             video.country = item["video_country"]
-        except KeyError:
+        else:
             video.country = ''
+        
         author.name = item["author"]
-        # tag.name = item["video_tags"]
 
         # check whether the author exists
         exist_author = session.query(Author).filter_by(name = author.name).first()
@@ -56,7 +57,7 @@ class SaveVideosPipeline(object):
             video.author = author
 
         # check whether the current video has tags or not
-        if "tags" in item:
+        if "video_tags" in item:
             for tag_name in item["video_tags"]:
                 tag = Tag(name=tag_name)
                 # check whether the current tag already exists in the database
