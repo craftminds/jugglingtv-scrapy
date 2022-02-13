@@ -45,7 +45,7 @@ class AuthorSpider(scrapy.Spider):
        loader.add_css('video_description', 'div.vv-video-desc::text')
        loader.add_css('video_year', 'span.vv-date::text')
        loader.add_css('video_country', 'span.vv-cunt::text')
-    #    loader.add_css('video_channels', 'div.mb-5.vv-chan a::attr(href)')
+       loader.add_css('video_channels', 'div.mb-5.vv-chan a::attr(href)')
        loader.add_css('video_tags', 'div.mb-5.vv-tags a::attr(href)')
        # this function is a key to run the item loader, otherwise there was no output
        yield loader.load_item()

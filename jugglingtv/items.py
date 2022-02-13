@@ -18,6 +18,11 @@ def extract_tag(text):
     text = text[text.rfind("/")+1:]
     return text
 
+def extract_channel(text):
+    #strip URL for channel only and format the right name
+    text = text[text.rfind("/")+1:].replace("-"," ").title()
+    return text
+
 def extract_date(text):
     #convert video date to python format
     return datetime.strptime(text,"%Y-%m-%d")
@@ -66,7 +71,10 @@ class VideoItem(Item):
         output_processor=TakeFirst()
 
     )
-    # video_channels = Field() <- to be specified later if the current code works
+    video_channels = Field(
+        input_processor = MapCompose(extract_channel)
+    )
+
     video_tags = Field(
         input_processor=MapCompose(extract_tag)
     )

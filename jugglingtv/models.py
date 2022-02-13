@@ -23,9 +23,14 @@ def create_table(engine):
 
 # Association Table for Many-to-Many relationship between Quote and Tag
 # https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#many-to-many
-quote_tag = Table('video_tag', Base.metadata,
+video_tag = Table('video_tag', Base.metadata,
     Column('video_id', Integer, ForeignKey('video.id')),
-    Column('tag_id', Integer, ForeignKey('tag.id'))
+    Column('tag_id', Integer, ForeignKey('tag.id')),
+)
+
+video_channel = Table('video_channel', Base.metadata,
+    Column('video_id', Integer, ForeignKey('video.id')),
+    Column('channel_id', Integer, ForeignKey('channel.id'))
 )
 
 
@@ -45,8 +50,9 @@ class Video(Base):
     country = Column('country', String(20))
     author_id = Column(Integer, ForeignKey('author.id'))  # Many videos to one author
     tags = relationship('Tag', secondary='video_tag',
-        lazy='dynamic', backref="video")  # M-to-M for quote and tag
-
+        lazy='dynamic', backref="video")  # M-to-M for video and tag
+    channels = relationship('Channel', secondary='video_channel',
+        lazy='dynamic', backref="video") #M-to-M for channel and video
 
 class Author(Base):
     __tablename__ = "author"
@@ -64,4 +70,14 @@ class Tag(Base):
     id = Column(Integer, primary_key=True)
     name = Column('name', String(30), unique=True)
     videos = relationship('Video', secondary='video_tag',
-        lazy='dynamic', backref="tag")  # M-to-M for quote and tag
+        lazy='dynamic', backref="tag")  # M-to-M for video and tag
+
+class Channel(Base):
+    __tablename__ = "channel"
+
+    #M-to-M for channel and video
+
+    id = Column(Integer, primary_key=True)
+    name = Column('name', String(30), unique=True)
+    videos = relationship('Video',secondary='video_channel',
+    lazy='dynamic', backref="channel") #M-to-M for channel and video
