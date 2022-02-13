@@ -8,7 +8,7 @@
 from itemadapter import ItemAdapter
 from sqlalchemy.orm import sessionmaker
 from scrapy.exceptions import DropItem
-from jugglingtv.models import Video, Author, Tag, db_connect, create_table
+from jugglingtv.models import Video, Author, Tag, Channel, db_connect, create_table
 
 # class JugglingtvPipeline:
 #     def process_item(self, item, spider):
@@ -33,6 +33,7 @@ class SaveVideosPipeline(object):
         video = Video()
         author = Author()
         tag = Tag()
+        channel = Channel()
         video.title = item["title"]
         video.thumbnail_url = item["thumbnail"]
         video.video_url = item["video_link"]
@@ -41,6 +42,7 @@ class SaveVideosPipeline(object):
         video.comments_no = item["comments_no"]
         video.description = item["video_description"]
         video.year = item["video_year"]
+        
         #check whether video_country exists
         if "video_country" in item:
             video.country = item["video_country"]
@@ -65,6 +67,16 @@ class SaveVideosPipeline(object):
                 if exist_tag is not None:  # the current tag exists
                     tag = exist_tag
                 video.tags.append(tag)
+        
+        # check whether the current video has channels or not
+        if "video_channels" in item:
+            for channel_name in item["video_channels"]:
+                channel = Channel(name=channel_name)
+                # check whether the current tag already exists in the database
+                exist_channel = session.query(Channel).filter_by(name = channel.name).first()
+                if exist_channel is not None:  # the current tag exists
+                    channel = exist_channel
+                video.channels.append(channel)
 
         try:
             session.add(video)
