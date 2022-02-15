@@ -33,7 +33,6 @@ video_channel = Table('video_channel', Base.metadata,
     Column('channel_id', Integer, ForeignKey('channel.id'))
 )
 
-
 class Video(Base):
 
     __tablename__ = "video"
@@ -79,5 +78,7 @@ class Channel(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column('name', String(30), unique=True)
+    image_url = Column('image_url', Text())
+    description = Column('description', Text())
     videos = relationship('Video',secondary='video_channel',
     lazy='dynamic', backref="channel") #M-to-M for channel and video
