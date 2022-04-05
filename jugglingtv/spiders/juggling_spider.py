@@ -27,7 +27,7 @@ class AuthorSpider(scrapy.Spider):
         for video in videos:
             loader = ItemLoader(item=VideoItem(), selector = video)
             loader.add_css('title', 'table.title a::text')
-            loader.add_css('video_link', 'table.title a::attr(href)')
+            loader.add_css('video_link', 'video::attr(src)')
             loader.add_css('thumbnail', 'div.imagewatch img::attr(src)')
             loader.add_css('views', 'td.views::text')
             loader.add_css('duration', 'td.duration::text')
