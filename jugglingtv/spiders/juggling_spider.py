@@ -38,10 +38,12 @@ class AuthorSpider(scrapy.Spider):
             # get inside the video and extract data
             video_url = video.css('table.title a::attr(href)').get()
             yield response.follow(video_url, self.parse_single_video, meta={'video_item': video_item})
-        # next_page = response.css('a.rightPaging::attr(href)').get()
-        # if next_page is not None:
-        #     next_page = response.urljoin(next_page)
-        #     yield scrapy.Request(next_page, callback=self.parse)
+        # step to another page from here
+        next_page = response.css('a.rightPaging::attr(href)').get()
+        if next_page is not None:
+            self.logger.info('Go to another page')
+            next_page = response.urljoin(next_page)
+            yield scrapy.Request(next_page, callback=self.parse)
     
     def parse_single_video(self, response):
         # def extract_with_css(query):
