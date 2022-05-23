@@ -90,3 +90,49 @@ class SaveVideosPipeline(object):
             session.close()
 
         return item
+
+class SaveChannelsPipeline(object):
+    def __init__(self):
+        """
+        Initializes database connection and sessionmaker
+        Creates tables
+        """
+        engine = db_connect()
+        create_table(engine)
+        self.Session = sessionmaker(bind=engine)
+
+
+    def process_item(self, item, spider):
+        """Save videos in the database
+        This method is called for every item pipeline component
+        """
+        session = self.Session()
+        channel = Channel()
+        
+        #check if the name exist
+        channel = Channel(name=item["title"])
+        exist_channel = session.query(Channel).filter_by(name = channel.name).first()
+        #UPDATE if exist.
+        if exist_channel is not None:
+            exist_channel.image_url = item["image_url"]
+            exist_channel.description = item["description"]
+        #ADD if doesn't exist
+        else:
+            channel.name = item["title"]
+            channel.image_url = item["image_url"]
+            channel.description = item["description"]
+            session.add(channel)
+
+        try:
+            session.commit()
+
+        except:
+            session.rollback()
+            raise
+
+        finally:
+            session.close()
+
+        return item
+
+    

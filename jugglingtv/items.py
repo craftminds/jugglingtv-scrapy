@@ -72,9 +72,19 @@ class VideoItem(Item):
 
     )
     video_channels = Field(
-        input_processor = MapCompose(extract_channel)
     )
 
     video_tags = Field(
         input_processor=MapCompose(extract_tag)
+    )
+
+class ChannelItem(Item):
+    title = Field(
+        output_processor=TakeFirst()
+    )
+    image_url = Field(
+        output_processor = TakeFirst()
+    )
+    description = Field(
+        output_processor=TakeFirst()
     )
