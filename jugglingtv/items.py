@@ -88,3 +88,29 @@ class ChannelItem(Item):
     description = Field(
         output_processor=TakeFirst()
     )
+    
+class AuthorItem(Item):
+    title = Field(
+        output_processor = TakeFirst()
+    )
+    image_url = Field(
+        output_processor = TakeFirst()
+    )
+    description = Field(
+        output_processor = TakeFirst()
+    )
+    full_name = Field(
+        output_processor = TakeFirst()
+    )
+    no_followers = Field(
+        output_processor = TakeFirst()
+    )
+    video_views = Field(
+        output_processor = TakeFirst()
+    )
+    profile_views= Field(
+        output_processor = TakeFirst()
+    )
+    profileinfo_url = Field(
+        output_processor = TakeFirst()
+    )

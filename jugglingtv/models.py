@@ -58,6 +58,13 @@ class Author(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column('name', String(50), unique=True)
+    full_name = Column('full_name', String(50))
+    no_followers = Column('no_followers', Integer)
+    video_views = Column('video_views', Integer)
+    profile_views = Column('profile_views', Integer)
+    profileinfo_url = Column('profileinfo_url', Text())
+    
+    # think how much data you want to bring to the new database - not everything is needed, and not many users have full profile info
     videos = relationship('Video', backref='author')  # One author to many Videos
 
 

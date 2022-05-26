@@ -135,4 +135,59 @@ class SaveChannelsPipeline(object):
 
         return item
 
+class SaveAuthorsPipeline(object):
+    def __init__(self):
+        """
+        Initializes database connection and sessionmaker
+        Creates tables
+        """
+        engine = db_connect()
+        create_table(engine)
+        self.Session = sessionmaker(bind=engine)
+
+
+    def process_item(self, item, spider):
+        """Save authors in the database
+        This method is called for every item pipeline component
+        """
+        session = self.Session()
+        author = Author()
+        
+        #check if the name exist
+        author = Author(name=item["title"])
+        exist_author = session.query(Author).filter_by(name = channel.name).first()
+        #UPDATE if exist.
+        if exist_author is not None:
+            
+            exist_author.image_url = item["image_url"]
+            exist_author.description = item["description"]
+            exist_author.full_name = item["full_name"]
+            exist_author.no_followers = item["no_followers"]
+            exist_author.video_views = item["video_views"]
+            exist_author.profile_views = item["profile_views"]
+            exist_author.profileinfo_url = item["profileinfo_url"]   
+        #ADD if doesn't exist
+        else:
+            author.name = item["title"]
+            author.image_url = item["image_url"]
+            author.description = item["description"]
+            author.full_name = item["full_name"]
+            author.no_followers = item["no_followers"]
+            author.video_views = item["video_views"]
+            author.profile_views = item["profile_views"]
+            author.profileinfo_url = item["profileinfo_url"]
+
+            session.add(author)
+
+        try:
+            session.commit()
+
+        except:
+            session.rollback()
+            raise
+
+        finally:
+            session.close()
+
+        return item
     

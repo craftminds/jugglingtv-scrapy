@@ -1,5 +1,5 @@
 import scrapy
-from jugglingtv.items import VideoItem, ChannelItem
+from jugglingtv.items import VideoItem, ChannelItem, AuthorItem
 from scrapy.loader import ItemLoader
 
 
@@ -41,7 +41,7 @@ class AuthorSpider(scrapy.Spider):
         # step to another page from here
         next_page = response.css('a.rightPaging::attr(href)').get()
         if next_page is not None:
-            self.logger.info('Go to another page')
+           # self.logger.info('Go to another page')
             next_page = response.urljoin(next_page)
             yield scrapy.Request(next_page, callback=self.parse)
     
@@ -71,7 +71,7 @@ class ChannelSpider(scrapy.Spider):
     }
 
     def parse(self,response):
-        channels_type = response.css("div.listchannel") # to be checked
+        channels_type = response.css("div.listchannel")
         for channel in channels_type:
             self.logger.info('Scrape it!')
             loader = ItemLoader(item=ChannelItem(), selector = channel)
@@ -84,4 +84,28 @@ class ChannelSpider(scrapy.Spider):
             channel_item = loader.load_item()
             yield loader.load_item()
 
-       
+class AuthorSpider(scrapy.Spider):
+    name = 'authors'
+    author_item = AuthorItem()
+    start_urls = ['http://juggling.tv/members']
+    custom_settings = {
+        'ITEM_PIPELINES': {
+            'jugglingtv.pipelines.SaveAuthorsPipeline': 300,
+        }
+    }
+
+    def parse(self,response):
+        authors_type = response.css("")
+        for author in authors_type:
+            self.logger.info('Scrape authors!')
+
+            # test and scare for authors below
+            loader = ItemLoader(item=ChannelItem(), selector = channel)
+            # title
+            loader.add_css('title', 'h2.title ::text')
+            # image URL
+            loader.add_css('image_url', 'div.imagechannel img::attr(src)')
+            # description
+            loader.add_css('description', 'span.chan_desc::text')
+            channel_item = loader.load_item()
+            yield loader.load_item()
