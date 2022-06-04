@@ -90,13 +90,10 @@ class ChannelItem(Item):
     )
     
 class AuthorItem(Item):
-    title = Field(
+    name = Field(
         output_processor = TakeFirst()
     )
     image_url = Field(
-        output_processor = TakeFirst()
-    )
-    description = Field(
         output_processor = TakeFirst()
     )
     full_name = Field(

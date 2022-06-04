@@ -58,6 +58,7 @@ class Author(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column('name', String(50), unique=True)
+    image_url = Column('image_url', Text())
     full_name = Column('full_name', String(50))
     no_followers = Column('no_followers', Integer)
     video_views = Column('video_views', Integer)

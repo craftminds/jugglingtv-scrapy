@@ -154,28 +154,26 @@ class SaveAuthorsPipeline(object):
         author = Author()
         
         #check if the name exist
-        author = Author(name=item["title"])
-        exist_author = session.query(Author).filter_by(name = channel.name).first()
+        author = Author(name=item["name"])
+        exist_author = session.query(Author).filter_by(name = author.name).first()
         #UPDATE if exist.
         if exist_author is not None:
             
             exist_author.image_url = item["image_url"]
-            exist_author.description = item["description"]
-            exist_author.full_name = item["full_name"]
-            exist_author.no_followers = item["no_followers"]
-            exist_author.video_views = item["video_views"]
-            exist_author.profile_views = item["profile_views"]
-            exist_author.profileinfo_url = item["profileinfo_url"]   
+            # exist_author.full_name = item["full_name"]
+            # exist_author.no_followers = item["no_followers"]
+            # exist_author.video_views = item["video_views"]
+            # exist_author.profile_views = item["profile_views"]
+            # exist_author.profileinfo_url = item["profileinfo_url"]   
         #ADD if doesn't exist
         else:
-            author.name = item["title"]
+            author.name = item["name"]
             author.image_url = item["image_url"]
-            author.description = item["description"]
-            author.full_name = item["full_name"]
-            author.no_followers = item["no_followers"]
-            author.video_views = item["video_views"]
-            author.profile_views = item["profile_views"]
-            author.profileinfo_url = item["profileinfo_url"]
+            # author.full_name = item["full_name"]
+            # author.no_followers = item["no_followers"]
+            # author.video_views = item["video_views"]
+            # author.profile_views = item["profile_views"]
+            # author.profileinfo_url = item["profileinfo_url"]
 
             session.add(author)
 

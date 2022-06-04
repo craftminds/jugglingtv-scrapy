@@ -95,17 +95,40 @@ class AuthorSpider(scrapy.Spider):
     }
 
     def parse(self,response):
-        authors_type = response.css("")
-        for author in authors_type:
+        authors = response.css("div.listmember")
+        for author in authors:
             self.logger.info('Scrape authors!')
 
             # test and scare for authors below
-            loader = ItemLoader(item=ChannelItem(), selector = channel)
+            loader = ItemLoader(item=AuthorItem(), selector = author)
             # title
-            loader.add_css('title', 'h2.title ::text')
+            loader.add_css('name', 'div.membername ::text')
             # image URL
-            loader.add_css('image_url', 'div.imagechannel img::attr(src)')
-            # description
-            loader.add_css('description', 'span.chan_desc::text')
-            channel_item = loader.load_item()
+            loader.add_css('image_url', 'img::attr(src)')
+            author_item = loader.load_item()
+
+            # get inside the author and extract data
+            author_url = author.css('a::attr(href)').get()
             yield loader.load_item()
+            #yield response.follow(author_url, self.parse_single_author, meta={'author_item': author_item})
+        #step to another page 
+        next_page = response.css('a.rightPaging::attr(href)').get()
+        if next_page is None:
+           # self.logger.info('Go to another page')
+            next_page = response.urljoin(next_page)
+            yield scrapy.Request(next_page, callback=self.parse)
+    
+    def parse_single_author(self, response):
+        author_item = response.meta['author_item']
+        loader = ItemLoader(item=author_item, response = reponse)
+
+        # how do I get all the info if everything is named 'profileinfo'?
+        # write all headers as a list
+        # write all info as a list
+        # extract in the AuthorItem class
+        loader.add_css('full_name', )
+        loader.add_css('no_followers', )
+        loader.add_css('video_views', )
+        loader.add_css('profile_views', )
+        loader.add_css('profileinfo_url', )
+
