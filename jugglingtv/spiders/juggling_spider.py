@@ -97,7 +97,7 @@ class AuthorSpider(scrapy.Spider):
     def parse(self,response):
         authors = response.css("div.listmember")
         for author in authors:
-            self.logger.info('Scrape authors!')
+            # self.logger.info('Scrape authors!')
 
             # test and scare for authors below
             loader = ItemLoader(item=AuthorItem(), selector = author)
@@ -109,8 +109,8 @@ class AuthorSpider(scrapy.Spider):
 
             # get inside the author and extract data
             author_url = author.css('a::attr(href)').get()
-            yield loader.load_item()
-            #yield response.follow(author_url, self.parse_single_author, meta={'author_item': author_item})
+            #yield loader.load_item()
+            yield response.follow(author_url, self.parse_single_author, meta={'author_item': author_item})
         #step to another page 
         next_page = response.css('a.rightPaging::attr(href)').get()
         if next_page is None:
@@ -120,15 +120,39 @@ class AuthorSpider(scrapy.Spider):
     
     def parse_single_author(self, response):
         author_item = response.meta['author_item']
-        loader = ItemLoader(item=author_item, response = reponse)
+        loader = ItemLoader(item=author_item, response = response)
 
-        # how do I get all the info if everything is named 'profileinfo'?
-        # write all headers as a list
-        # write all info as a list
-        # extract in the AuthorItem class
-        loader.add_css('full_name', )
-        loader.add_css('no_followers', )
-        loader.add_css('video_views', )
-        loader.add_css('profile_views', )
-        loader.add_css('profileinfo_url', )
+        # get the list of headers and strip from whitespaces
+        profile_info_headers = response.css('h3.field-name-profile ::text').getall()
+        profile_info_headers = [i.strip(': ') for i in profile_info_headers]
+        print(profile_info_headers)
+        # get the list of profile info and strip from whitespaces
+        profile_info_list = response.css('div.profileinfo ::text').getall()
+        profile_info_list = [i.strip() for i in profile_info_list]
+
+        
+        print(profile_info_list)
+   
+        # check if the full name is there
+        full_name = response.css('div.field-name-profile ::text').get()
+
+
+        if full_name is None:
+            # full_name = response.css('div.profileinfo::text').get().strip()
+            loader.add_value('full_name', ' ')
+            profile_info_dict = dict(zip(profile_info_headers,profile_info_list))
+        else:
+            loader.add_value('full_name', profile_info_list[0])
+            profile_info_headers.insert(0, 'Full name')
+            profile_info_dict = dict(zip(profile_info_headers,profile_info_list))
+        
+        # loader.add_css('no_followers', )
+        if 'Followers' in profile_info_dict:
+            loader.add_value('no_followers', profile_info_dict['Followers'])
+        else:
+            loader.add_value('no_followers', 0)
+        # loader.add_css('video_views', )
+        # loader.add_css('profile_views', )
+        # loader.add_css('profileinfo_url', )
+        yield loader.load_item()
 
