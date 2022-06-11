@@ -152,7 +152,15 @@ class AuthorSpider(scrapy.Spider):
         else:
             loader.add_value('no_followers', 0)
         # loader.add_css('video_views', )
+        if 'Video Views' in profile_info_dict:
+            loader.add_value('video_views', profile_info_dict['Video Views'])
+        else:
+            loader.add_value('video_views', 0)
         # loader.add_css('profile_views', )
+        if 'Profile Views' in profile_info_dict:
+            loader.add_value('profile_views', profile_info_dict['Profile Views'])
+        else:
+            loader.add_value('profile_views', 0)
         # loader.add_css('profileinfo_url', )
         yield loader.load_item()
 
