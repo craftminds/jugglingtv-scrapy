@@ -164,6 +164,8 @@ class SaveAuthorsPipeline(object):
             exist_author.no_followers = item["no_followers"]
             exist_author.video_views = item["video_views"]
             exist_author.profile_views = item["profile_views"]
+            exist_author.hometown = item["hometown"]
+            exist_author.country = item["country"]
             # exist_author.profileinfo_url = item["profileinfo_url"]   
         #ADD if doesn't exist
         else:
@@ -173,6 +175,8 @@ class SaveAuthorsPipeline(object):
             author.no_followers = item["no_followers"]
             author.video_views = item["video_views"]
             author.profile_views = item["profile_views"]
+            author.hometown = item["hometown"]
+            author.country = item["country"]
             # author.profileinfo_url = item["profileinfo_url"]
 
             session.add(author)

@@ -113,7 +113,7 @@ class AuthorSpider(scrapy.Spider):
             yield response.follow(author_url, self.parse_single_author, meta={'author_item': author_item})
         #step to another page 
         next_page = response.css('a.rightPaging::attr(href)').get()
-        if next_page is None:
+        if next_page is not None:
            # self.logger.info('Go to another page')
             next_page = response.urljoin(next_page)
             yield scrapy.Request(next_page, callback=self.parse)
@@ -161,6 +161,15 @@ class AuthorSpider(scrapy.Spider):
             loader.add_value('profile_views', profile_info_dict['Profile Views'])
         else:
             loader.add_value('profile_views', 0)
-        # loader.add_css('profileinfo_url', )
+
+        if 'Hometown' in profile_info_dict:
+            loader.add_value('hometown', profile_info_dict['Hometown'])
+        else:
+            loader.add_value('hometown', ' ')
+
+        if 'Country' in profile_info_dict:
+            loader.add_value('country', profile_info_dict['Country'])
+        else:
+            loader.add_value('country', ' ')
         yield loader.load_item()
 

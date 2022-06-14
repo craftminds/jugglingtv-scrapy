@@ -115,3 +115,9 @@ class AuthorItem(Item):
     profileinfo_url = Field(
         output_processor = TakeFirst()
     )
+    hometown = Field(
+        output_processor = TakeFirst()
+    )
+    country = Field(
+        output_processor = TakeFirst()
+    )

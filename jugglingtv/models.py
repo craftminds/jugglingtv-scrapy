@@ -64,6 +64,9 @@ class Author(Base):
     video_views = Column('video_views', Integer)
     profile_views = Column('profile_views', Integer)
     profileinfo_url = Column('profileinfo_url', Text())
+    hometown = Column('hometown', Text())
+    country = Column('country', Text())
+    
     
     # think how much data you want to bring to the new database - not everything is needed, and not many users have full profile info
     videos = relationship('Video', backref='author')  # One author to many Videos
