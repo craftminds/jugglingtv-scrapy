@@ -10,7 +10,7 @@ import logging
 # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 # logging.getLogger("sqlalchemy.pool").setLevel(logging.DEBUG)
 
-class AuthorSpider(scrapy.Spider):
+class VideoSpider(scrapy.Spider):
     name = 'videos'
     video_item = VideoItem()
     start_urls = ['http://juggling.tv/videos/basic/mr']
