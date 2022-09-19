@@ -90,4 +90,4 @@ ITEM_PIPELINES = {
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 #connection string to connect to database - can be replace for another databse container type
-CONNECTION_STRING = 'sqlite:////Users/arturwitek/Development/scrapy/jugglingtv/scrapy_jugglingtv.db'
+CONNECTION_STRING = 'sqlite:////Users/arturwitek/Development/scrapy/jugglingtv/jugglingtv_v3.db'
